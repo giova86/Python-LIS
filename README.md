@@ -7,7 +7,7 @@ Italian Sign Language or LIS (Lingua dei Segni Italiana) is the visual language 
 
 # How to
 ## 1. Python version
-These program are written to work with Python 3.8.4.
+These programs are written to work with Python 3.8.4.
 
 ## 2. Libraries and packages
 Use the file ``requirements.txt`` to install all the dependencies. In order to do that use the commmand:
