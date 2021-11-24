@@ -93,14 +93,14 @@ def draw_limit_lh(image, results):
 
 def check_detection(image, results):
     if results.left_hand_landmarks:
-        cv2.putText(image, 'Left Hand: DETECTED',(10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+        cv2.putText(image, 'Left Hand: DETECTED',(10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
     else:
-        cv2.putText(image, 'Left Hand: NOT DETECTED',(10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+        cv2.putText(image, 'Left Hand: NOT DETECTED',(10,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
 
     if results.right_hand_landmarks:
-        cv2.putText(image, 'Right Hand: DETECTED',(10,70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(image, 'Right Hand: DETECTED',(10,70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
     else:
-        cv2.putText(image, 'Right Hand: NOT DETECTED',(10,70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        cv2.putText(image, 'Right Hand: NOT DETECTED',(10,70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
 
     if results.face_landmarks:
         cv2.putText(image, 'Face: DETECTED',(10,110), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
