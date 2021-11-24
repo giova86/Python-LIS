@@ -17,7 +17,7 @@ pip3 install -r requirements.txt
 ```
 
 ## 3. Mediapipe
-Mediapiape offers open a customizable ML solutions for live and streaming media. MediaPipe offers ready-to-use yet customizable Python solutions as a prebuilt Python package. MediaPipe Python package is available on PyPI for Linux, macOS and Windows.This project is focused on:
+Mediapipe offers open a customizable ML solutions for live and streaming media. MediaPipe offers ready-to-use yet customizable Python solutions as a prebuilt Python package. MediaPipe Python package is available on PyPI for Linux, macOS and Windows.This project is focused on:
 * Face detection;
 * Hands detection;
 * Pose detection.
