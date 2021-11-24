@@ -49,6 +49,12 @@ def draw_limit_rh(image, results):
         xMin = min([i.x for i in results.right_hand_landmarks.landmark])
         yMax = max([i.y for i in results.right_hand_landmarks.landmark])
         yMin = min([i.y for i in results.right_hand_landmarks.landmark])
+
+        xMax=xMax+0.1*(xMax-xMin)
+        yMax=yMax+0.1*(yMax-yMin)
+        xMin=xMin-0.1*(xMax-xMin)
+        yMin=yMin-0.1*(yMax-yMin)
+
         h,w,_ = image.shape
         cv2.rectangle(image, (int(xMin*w), int(yMin*h)),  (int(xMax*w), int(yMax*h)), (255,0,0), 1)
         cv2.line(image, (int(xMin*w), int(yMin*h)), (int(xMin*w), int(yMin*h)+int((yMax*h-yMin*h)/5)), (255,0,0),8)
@@ -67,6 +73,12 @@ def draw_limit_lh(image, results):
         xMin = min([i.x for i in results.left_hand_landmarks.landmark])
         yMax = max([i.y for i in results.left_hand_landmarks.landmark])
         yMin = min([i.y for i in results.left_hand_landmarks.landmark])
+
+        xMax=xMax+0.1*(xMax-xMin)
+        yMax=yMax+0.1*(yMax-yMin)
+        xMin=xMin-0.1*(xMax-xMin)
+        yMin=yMin-0.1*(yMax-yMin)
+
         h,w,_ = image.shape
         cv2.rectangle(image, (int(xMin*w), int(yMin*h)),  (int(xMax*w), int(yMax*h)), (0,0,255), 1)
         cv2.line(image, (int(xMin*w), int(yMin*h)), (int(xMin*w), int(yMin*h)+int((yMax*h-yMin*h)/5)), (0,0,255),8)
@@ -99,9 +111,6 @@ def check_detection(image, results):
         cv2.putText(image, 'Pose: DETECTED',(10,150), cv2.FONT_HERSHEY_SIMPLEX, 1, (80,256,121), 2)
     else:
         cv2.putText(image, 'Pose: NOT DETECTED',(10,150), cv2.FONT_HERSHEY_SIMPLEX, 1, (80,256,121), 2)
-
-    # if results.face_landmarks:
-    #     cv2.putText(image, 'Right Hand',(int(xMin*w), int(yMin*h-(yMax*h-yMin*h)/20)), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
 
 def points_detection(results):
     xMax = max([i.x for i in results.right_hand_landmarks.landmark])
