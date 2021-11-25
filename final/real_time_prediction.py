@@ -8,27 +8,30 @@ import os
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, draw_limit_rh, draw_limit_lh, check_detection, points_detection
 from keras.models import model_from_json
 
-# load json and create model
-json_file = open('model_rh.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-model = model_from_json(loaded_model_json)
-# load weights into new model
-model.load_weights("model_rh.h5")
-print("Loaded model from disk")
 
-# parameters
+# - INPUT PARAMETERS ------------------------------- #
+PATH_MODEL_JSON = '../models/model_rh.json'
+PATH_MODEL_WEIGHTS = '../models/model_rh.h5'
 threshold = 0.4
 min_detection_confidence = 0.5
 min_tracking_confidence = 0.5
 labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
+# -------------------------------------------------- #
 
+
+# load json and create model
+json_file = open(PATH_MODEL_JSON, 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+model = model_from_json(loaded_model_json)
+# load weights into new model
+model.load_weights(PATH_MODEL_WEIGHTS)
+print("Loaded model from disk")
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 
 cap = cv2.VideoCapture(0)
-
 
 with mp_holistic.Holistic(min_detection_confidence=min_detection_confidence,
                           min_tracking_confidence=min_tracking_confidence) as holistic:
