@@ -63,7 +63,9 @@ with mp_holistic.Holistic(min_detection_confidence=min_detection_confidence,
                 cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
 
             # add text with prediction
-            if pred_prob > threshold*100:
+            #if pred_prob > threshold*100:
+
+            if pred_prob > int(threshold):
                 cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
                             (0+int(0.05*h),h-int(0.05*h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
