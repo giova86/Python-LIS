@@ -52,7 +52,7 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 ## 4. Data Collection
 In order to create the dataset for training models an automatic procedure for data collection has been developed. Since all the positions of the letters of the alphabet are static only the right hand features will be collected. In Mediapipe a right hand is descibed by 21 points. Each point has 3 coordinates (x, y and z). As a consequence, a total of 63 features will be recorded in a CSV file. 
 
-The samples number for each class is define by user in the command line (NOT IMPLEMENTED).
+The samples number for each class and the output name of the CSV file are defined by user in the command line (NOT IMPLEMENTED).
 ```
 $ python rh_dataset_collection.py -s <samples_for_each_class>
 ```
