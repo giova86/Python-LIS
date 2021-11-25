@@ -54,7 +54,7 @@ In order to create the dataset for training models an automatic procedure for da
 
 The samples number for each class and the output name of the CSV file are defined by user in the command line (NOT IMPLEMENTED).
 ```
-$ python rh_dataset_collection.py -s <samples_for_each_class>
+$ python rh_dataset_collection.py -s <samples_for_each_class> -o <output.csv>
 ```
 
 ## 5. Models Training
