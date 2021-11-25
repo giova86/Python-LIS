@@ -45,7 +45,7 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 </p>
 <p align="center">
   <img width="560"  src="images/hand_not_detected.png">
-  <figcaption align = "center">Figure 2: Everything detected.</figcaption>
+  <figcaption align = "center">Figure 2: Hands not detected.</figcaption>
 </p>
 <br>
 
