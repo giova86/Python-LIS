@@ -50,7 +50,7 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 <br>
 
 ## 4. Data Collection
-
+In order to create the dataset for training models an automatic procedure for data collection has been developed.
 ## 5. Models Training
 
 ## 6. Real time prediction
