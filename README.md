@@ -5,7 +5,7 @@ The aim of the project is to create a ML model that will be able to detect the r
 
 <br>
 <p align="center">
-  <img width="460"  src="images/alfabeto-lingua-dei-segni-810x1024.jpg-2.jpg">
+  <img width="460"  src="images/alfabeto_LIS.jpg">
   <figcaption align = "center">Figure 1: LIS alphabet [[1](https://dizionarioinlis.wordpress.com)].</figcaption>
 </p>
 <br>
