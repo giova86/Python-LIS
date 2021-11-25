@@ -9,9 +9,10 @@ import os
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, points_detection
 import pandas as pd
 
-# input
+# -- INPUT ----------------------------------------------
 labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
 no_sequences = 101
+# -------------------------------------------------------
 
 
 # data collection
