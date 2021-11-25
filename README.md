@@ -40,8 +40,12 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 
 <br>
 <p align="center">
-  <img width="460"  src="images/alfabeto-lingua-dei-segni-810x1024.jpg-2.jpg">
-  <figcaption align = "center">Figure 2: LIS alphabet [[1](https://dizionarioinlis.wordpress.com)].</figcaption>
+  <img width="560"  src="images/hand_detected.png">
+  <figcaption align = "center">Figure 2: Everything detected.</figcaption>
+</p>
+<p align="center">
+  <img width="560"  src="images/hand_not_detected.png">
+  <figcaption align = "center">Figure 2: Everything detected.</figcaption>
 </p>
 <br>
 
