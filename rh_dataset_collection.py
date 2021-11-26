@@ -19,11 +19,13 @@ parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", defaul
 parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
 parser.add_argument("-o", "--output", dest="output_file", default='data_rh',
-                    help="Name of the saved model. default is 'model_svm'")
+                    help="Name of the saved model. default is 'data_rh'")
 args = parser.parse_args()
 
 # -- INPUT ----------------------------------------------
-labels = np.array(['a', 'b', 'c', 'd', 'e', 'f', 'h', 'i']) # put the entire alphabet in the future
+labels = np.array(['a', 'b', 'c', 'd', 'e', 'f', 'h', 'i',
+                   'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                   't', 'u', 'v', 'w', 'x', 'y'])
 no_sequences = args.sample + 1
 # -------------------------------------------------------
 
@@ -87,5 +89,5 @@ y=[]
 for i in labels:
     y = np.concatenate([y, [i] * (no_sequences-1)])
 df['y'] = y
-pd.DataFrame(df).to_csv('models/data_rh_test.csv')
+pd.DataFrame(df).to_csv(f'models/{args.output_file}.csv')
 print(df['y'].value_counts())
