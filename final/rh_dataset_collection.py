@@ -10,7 +10,7 @@ from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, po
 import pandas as pd
 
 # -- INPUT ----------------------------------------------
-labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
+labels = np.array(['a', 'b', 'c', 'd', 'e', 'f', 'h', 'i']) # put the entire alphabet in the future
 no_sequences = 101
 # -------------------------------------------------------
 

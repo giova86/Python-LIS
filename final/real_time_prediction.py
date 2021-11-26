@@ -9,20 +9,33 @@ from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, dr
 #from keras.models import model_from_json
 import pickle
 from sklearn import svm
+from argparse import ArgumentParser
 
 
 # - INPUT PARAMETERS ------------------------------- #
-PATH_MODEL_SVM = '../models/model_svm.sav'
+#PATH_MODEL_SVM = '../models/model_svm.sav'
 # PATH_MODEL_JSON = '../models/model_rh.json'
 # PATH_MODEL_WEIGHTS = '../models/model_rh.h5'
-threshold = 0.4
-min_detection_confidence = 0.5
-min_tracking_confidence = 0.5
+# threshold = 0.4
+# min_detection_confidence = 0.5
+# min_tracking_confidence = 0.5
 labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
 # -------------------------------------------------- #
 
+parser = ArgumentParser()
+parser.add_argument("-m", "--model", dest="ML_model", default='../models/model_svm.sav',
+                    help="PATH of model FILE.", metavar="FILE")
+parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.5, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", default=0.5, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+args = parser.parse_args()
+
 # load svm model
-model = pickle.load(open(PATH_MODEL_SVM, 'rb'))
+model = pickle.load(open(args.ML_model, 'rb'))
+labels = np.array(model.classes_) # put the entire alphabet in the future
 
 # # load json and create model
 # json_file = open(PATH_MODEL_JSON, 'r')
@@ -38,8 +51,8 @@ mp_drawing = mp.solutions.drawing_utils
 
 cap = cv2.VideoCapture(0)
 
-with mp_holistic.Holistic(min_detection_confidence=min_detection_confidence,
-                          min_tracking_confidence=min_tracking_confidence) as holistic:
+with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
+                          min_tracking_confidence=args.min_tracking_confidence) as holistic:
     while cap.isOpened():
         ret, frame = cap.read()
         #frame = cv2.flip(frame, 1)
@@ -78,7 +91,7 @@ with mp_holistic.Holistic(min_detection_confidence=min_detection_confidence,
 
             # add text with prediction
 
-            if pred_prob > int(threshold):
+            if pred_prob > int(args.threshold_prediction):
                 cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
                             (0+int(0.05*h),h-int(0.05*h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
@@ -107,7 +120,7 @@ with mp_holistic.Holistic(min_detection_confidence=min_detection_confidence,
 
         #draw_landmarks_custom(frame, results)
 
-        cv2.imshow('LIS', frame)
+        cv2.imshow('LIS: real time alphabet prediction', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

@@ -4,11 +4,20 @@ import numpy as np
 import pickle
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
+from argparse import ArgumentParser
 
-# load dataset for training
-print('')
-print('--> Loading dataset')
-df = pd.read_csv('../data/data_rh.csv', index_col=0)
+
+parser = ArgumentParser()
+parser.add_argument("-i", "--file", dest="filename", default='../data/data_rh.csv',
+                    help="PATH of training FILE")
+parser.add_argument("-t", "--test", dest="test_size", default=0.3, type=float,
+                    help="Test size. A number between 0 and 1. default value is 0.3")
+parser.add_argument("-o", "--output", dest="output_file", default='model_svm',
+                    help="Name of the saved model. default is 'model_svm'")
+args = parser.parse_args()
+
+print(f'--> Loading dataset from {args.filename}')
+df = pd.read_csv(args.filename, index_col=0)
 print('DONE')
 
 # prepare X and y variables
@@ -21,7 +30,7 @@ print(f'Number of features: {X.shape[1]}')
 print(f'Number of classes: {len(np.unique(y))}')
 
 # train test splitting
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3) # 70% training and 30% test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=args.test_size) # 70% training and 30% test
 print(f'Number of samples for Training: {len(X_train)}')
 print(f'Number of samples for Test: {len(X_test)}')
 
@@ -44,8 +53,8 @@ print("Accuracy Test: ",metrics.accuracy_score(y_test, y_test_pred))
 
 # save the model to disk
 print('')
-print('--> Saving model in "../models/model_svm.sav"')
-filename = '../models/model_svm.sav'
+print(f'--> Saving model in "../models/{args.output_file}.sav"')
+filename = f'../models/{args.output_file}.sav'
 pickle.dump(clf, open(filename, 'wb'))
 print("DONE")
 print('')
