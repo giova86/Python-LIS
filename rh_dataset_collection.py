@@ -8,10 +8,23 @@ import numpy as np
 import os
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, points_detection
 import pandas as pd
+from argparse import ArgumentParser
+
+
+parser = ArgumentParser()
+parser.add_argument("-s", "--sample", dest="sample", default='100',
+                    help="PATH of training FILE")
+parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", default=0.5, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-o", "--output", dest="output_file", default='data_rh',
+                    help="Name of the saved model. default is 'model_svm'")
+args = parser.parse_args()
 
 # -- INPUT ----------------------------------------------
 labels = np.array(['a', 'b', 'c', 'd', 'e', 'f', 'h', 'i']) # put the entire alphabet in the future
-no_sequences = 101
+no_sequences = args.sample + 1
 # -------------------------------------------------------
 
 
@@ -21,7 +34,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 data = []
 cap = cv2.VideoCapture(0)
-with mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5) as holistic:
+with mp_holistic.Holistic(min_detection_confidence=args.min_dections_confidence, min_tracking_confidence=args.min_tracking_confidence) as holistic:
 
     for label in labels:
         id=0
@@ -74,5 +87,5 @@ y=[]
 for i in labels:
     y = np.concatenate([y, [i] * (no_sequences-1)])
 df['y'] = y
-pd.DataFrame(df).to_csv('data_rh_test.csv')
+pd.DataFrame(df).to_csv('models/data_rh_test.csv')
 print(df['y'].value_counts())

@@ -19,11 +19,11 @@ from argparse import ArgumentParser
 # threshold = 0.4
 # min_detection_confidence = 0.5
 # min_tracking_confidence = 0.5
-labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
+#labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
 # -------------------------------------------------- #
 
 parser = ArgumentParser()
-parser.add_argument("-m", "--model", dest="ML_model", default='../models/model_svm.sav',
+parser.add_argument("-m", "--model", dest="ML_model", default='models/model_svm.sav',
                     help="PATH of model FILE.", metavar="FILE")
 parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.5, type=float,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
@@ -48,7 +48,7 @@ labels = np.array(model.classes_) # put the entire alphabet in the future
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
-
+words = []
 cap = cv2.VideoCapture(0)
 
 with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
@@ -61,17 +61,17 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
         # make detection
         image, results = mediapipe_detection(frame, holistic)
 
-        color = (0,0,255)
+        color = (0,0,0)
         cv2.rectangle(frame, (0+int(0.03*h),int(h-0.14*h)), (0+int(0.75*h), int(h-0.015*h)), color,-1)
 
         for i in range(len(labels)):
             cv2.rectangle(frame, (70, 10+ i*int(50)), (70+0, 60+ i*int(50)), color,-1)
-            cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
+            cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 4, cv2.LINE_AA)
 
         # perform prediction with relative probability
         if results.right_hand_landmarks:
 
-            #draw_limit_rh(frame, results)
+            # draw_limit_rh(frame, results)
 
             # uncomment for NN
             # prediction = labels[np.argmax(model.predict(np.array([points_detection(results)])))]
@@ -81,7 +81,7 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
             for i in range(len(labels)):
                 cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
-                cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
+                cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 4, cv2.LINE_AA)
 
             # uncomment for NN
             # for i in range(len(labels)):
@@ -90,7 +90,6 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
 
             # add text with prediction
-
             if pred_prob > int(args.threshold_prediction):
                 cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
                             (0+int(0.05*h),h-int(0.05*h)),
