@@ -139,6 +139,15 @@ optional arguments:
                         Threshold for prediction. A number between 0 and 1. default is 0.5
 ```
 
+<br>
+<p align="center">
+  <img width="460"  src="images/letter_V.png">
+  <img width="460"  src="images/letter_H.png">
+  <img width="460"  src="images/letter_Y.png">
+  <figcaption align = "center">Figure 4: Real time prediction of letters V, H and Y</figcaption>
+</p>
+<br>
+
 # Bibliography
 [1] [https://dizionarioinlis.wordpress.com](https://dizionarioinlis.wordpress.com)
 
