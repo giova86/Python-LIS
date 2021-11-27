@@ -13,15 +13,6 @@ from argparse import ArgumentParser
 
 
 # - INPUT PARAMETERS ------------------------------- #
-#PATH_MODEL_SVM = '../models/model_svm.sav'
-# PATH_MODEL_JSON = '../models/model_rh.json'
-# PATH_MODEL_WEIGHTS = '../models/model_rh.h5'
-# threshold = 0.4
-# min_detection_confidence = 0.5
-# min_tracking_confidence = 0.5
-#labels = np.array(['a', 'b', 'c']) # put the entire alphabet in the future
-# -------------------------------------------------- #
-
 parser = ArgumentParser()
 parser.add_argument("-m", "--model", dest="ML_model", default='models/model_svm_all.sav',
                     help="PATH of model FILE.", metavar="FILE")
@@ -32,19 +23,12 @@ parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", defaul
 parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
 args = parser.parse_args()
+# -------------------------------------------------- #
+
 
 # load svm model
 model = pickle.load(open(args.ML_model, 'rb'))
 labels = np.array(model.classes_) # put the entire alphabet in the future
-
-# # load json and create model
-# json_file = open(PATH_MODEL_JSON, 'r')
-# loaded_model_json = json_file.read()
-# json_file.close()
-# model = model_from_json(loaded_model_json)
-# # load weights into new model
-# model.load_weights(PATH_MODEL_WEIGHTS)
-# print("Loaded model from disk")
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
@@ -120,12 +104,12 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                             cv2.LINE_AA)
 
         else:
-                cv2.putText(frame, 'Detecting Hand',
+                cv2.putText(frame, 'Detecting Hand...',
                             (w-int(0.5*h),int(0.05*h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             2,
                             (0,0,0),
-                            4,
+                            2,
                             cv2.LINE_AA)
 
 
