@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 
 
 parser = ArgumentParser()
-parser.add_argument("-i", "--file", dest="filename", default='data/data_rh.csv',
+parser.add_argument("-i", "--file", dest="filename", default='data/data_rh_all.csv',
                     help="PATH of training FILE")
 parser.add_argument("-t", "--test", dest="test_size", default=0.3, type=float,
                     help="Test size. A number between 0 and 1. default value is 0.3")
@@ -17,7 +17,7 @@ parser.add_argument("-o", "--output", dest="output_file", default='model_svm',
 args = parser.parse_args()
 
 print(f'--> Loading dataset from {args.filename}')
-df = pd.read_csv(args.filename, index_col=0)
+df = pd.read_csv('args.filename', index_col=0)
 print('DONE')
 
 # prepare X and y variables
@@ -54,7 +54,7 @@ print("Accuracy Test: ",metrics.accuracy_score(y_test, y_test_pred))
 # save the model to disk
 print('')
 print(f'--> Saving model in "models/{args.output_file}.sav"')
-filename = f'../models/{args.output_file}.sav'
+filename = f'models/{args.output_file}.sav'
 pickle.dump(clf, open(filename, 'wb'))
 print("DONE")
 print('')
