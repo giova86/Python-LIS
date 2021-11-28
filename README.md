@@ -28,9 +28,11 @@ Structure of the project is:
 ```shell
 Python-LIS/
 	|__ data/
-		|__ data_rh.csv	
+		|__ data_rh_test.csv
+		|__ data_rh_all.csv	
 	|__ models/
-		|__ model_svm.sav
+		|__ model_svm_test.sav
+		|__ model_svm_all.sav
 	|__ images/
 		|__ alfabeto_LIS.jpg
 		|__ hand_detected.png
@@ -39,6 +41,9 @@ Python-LIS/
 		|__ LIS.ipynb
 		|__ LIS_rh.ipynb
 		|__ Untitled.ipynb
+		|__ letter_H.png
+		|__ letter_Y.png
+		|__ letter_V.png
 	|__ venv/
 	|__ README.md
 	|__ requirements.txt
