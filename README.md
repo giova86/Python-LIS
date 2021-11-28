@@ -82,7 +82,7 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 <br>
 
 ## 4. Data Collection
-In order to create a dataset for training models, an automatic procedure for data collection has been developed (```rh_dataset_collection.py ```). Since all the positions of the letters of the LIS alphabet can be reproduced with one hand only the right hand features will be collected. In Mediapipe a right hand is descibed by 21 points. Each point has 3 coordinates (x, y and z). As a consequence, a total of 63 features will be recorded in a CSV file. 
+In order to create a dataset for training models, an automatic procedure for data collection has been developed (```rh_dataset_collection.py ```). Since all the positions of the letters of the LIS alphabet can be reproduced using one hand only the right hand features will be collected. In Mediapipe a right hand is descibed by 21 points. Each point has 3 coordinates (x, y and z). As a consequence, a total of 63 features will be recorded in a CSV file. 
 
 The samples number of each class, the minimum confidence for detection/tracking required and the output name of the CSV file can be defined by user in the command line.
 
@@ -128,7 +128,7 @@ optional arguments:
 The model will be saved in the ```models/``` folder.
 
 ## 6. Real time prediction
-in order to test the model in real time use the ```real_time_prediction.py``` file. Optional parameters allow to specify the ML model and the prediction/detection/tracking confidences.
+In order to test the model in real time use the ```real_time_prediction.py``` file. Optional parameters allow to specify the ML model and the prediction/detection/tracking confidences.
 
 ```shell
 $ python real_time_prediction.py -h
