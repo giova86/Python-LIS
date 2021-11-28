@@ -82,23 +82,26 @@ The webcam will be able to detect the right/left hand, the face and the pose of 
 <br>
 
 ## 4. Data Collection
-In order to create the dataset for training models an automatic procedure for data collection has been developed. Since all the positions of the letters of the alphabet are static only the right hand features will be collected. In Mediapipe a right hand is descibed by 21 points. Each point has 3 coordinates (x, y and z). As a consequence, a total of 63 features will be recorded in a CSV file. 
+In order to create a dataset for training models, an automatic procedure for data collection has been developed (```rh_dataset_collection.py ```). Since all the positions of the letters of the LIS alphabet can be reproduced with one hand only the right hand features will be collected. In Mediapipe a right hand is descibed by 21 points. Each point has 3 coordinates (x, y and z). As a consequence, a total of 63 features will be recorded in a CSV file. 
 
-The samples number for each class and the output name of the CSV file are defined by user in the command line (NOT IMPLEMENTED).
+The samples number of each class, the minimum confidence for detection/tracking required and the output name of the CSV file can be defined by user in the command line.
 
 ```shell
 $ python rh_dataset_collection.py -h
 
-usage: rh_dataset_collection.py [-h] [-s SAMPLE] [-dc MIN_DETECTION_CONFIDENCE] [-tc MIN_TRACKING_CONFIDENCE]
+usage: rh_dataset_collection.py [-h] [-s SAMPLE] [-dc MIN_DETECTION_CONFIDENCE]
+                                [-tc MIN_TRACKING_CONFIDENCE] [-o OUTPUT_FILE]
 
 optional arguments:
   -h, --help            show this help message and exit
   -s SAMPLE, --sample SAMPLE
-                        PATH of training FILE
+                        number of samples for each letter. default value is 100
   -dc MIN_DETECTION_CONFIDENCE, --det_conf MIN_DETECTION_CONFIDENCE
                         Threshold for prediction. A number between 0 and 1. default is 0.5
   -tc MIN_TRACKING_CONFIDENCE, --trk_conf MIN_TRACKING_CONFIDENCE
                         Threshold for prediction. A number between 0 and 1. default is 0.5
+  -o OUTPUT_FILE, --output OUTPUT_FILE
+                        Name of the saved model. default is 'data_rh'
 ```
 
 The CSV file will be saved in the ```data/``` folder.
