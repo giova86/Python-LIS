@@ -47,6 +47,9 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
         color = (0,0,0)
         #cv2.rectangle(frame, (0+int(0.03*h),int(h-0.14*h)), (0+int(0.75*h), int(h-0.015*h)), color,-1)
+        cv2.rectangle(frame, (0, 0),
+                             (int(w*0.18), int(h-h*0.12)), (255,255,255),-1)
+
 
         for i in range(len(labels)):
 #            cv2.rectangle(frame, (90, 10+ i*int(50)), (90, 60+ i*int(50)), color,-1)
@@ -69,7 +72,7 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 #                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
                 cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
                 cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
-                                     (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, (i+1)*int(h/(len(labels)+4)) ), color,-1)
+                                     (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+4)) ), color,-1)
 
             # uncomment for NN
             # for i in range(len(labels)):
