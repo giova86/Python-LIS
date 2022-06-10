@@ -10,14 +10,15 @@ from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, dr
 import pickle
 from sklearn import svm
 from argparse import ArgumentParser
+from collections import Counter
 
 
 # - INPUT PARAMETERS ------------------------------- #
 parser = ArgumentParser()
 parser.add_argument("-m", "--model", dest="ML_model", default='models/model_svm_all.sav',
                     help="PATH of model FILE.", metavar="FILE")
-parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.5, type=float,
-                    help="Threshold for prediction. A number between 0 and 1. default is 0.5")
+parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.7, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.7")
 parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", default=0.5, type=float,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
 parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
@@ -33,7 +34,7 @@ labels = np.array(model.classes_) # put the entire alphabet in the future
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 words = []
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
                           min_tracking_confidence=args.min_tracking_confidence) as holistic:
@@ -70,52 +71,80 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
             prediction = model.predict(np.array([points_detection(results)]))[0]
             pred_prob = np.max(model.predict_proba(np.array([points_detection(results)])))
 
-            for i in range(len(labels)):
-#                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
-                cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
-                cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
-                                     (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+4)) ), color,-1)
-
-            # uncomment for NN
-            # for i in range(len(labels)):
-            #     cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
-            #     cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
-
-
-            # add text with prediction
             if pred_prob > args.threshold_prediction:
-                cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
-                            (0+int(0.05*h),h-int(0.05*h)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
-                            (0,255,0),
-                            2,
-                            cv2.LINE_AA)
-            elif pred_prob < 0.3:
-                cv2.putText(frame, 'I am not sure...',
-                            (0+int(0.05*h),h-int(0.05*h)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
-                            (0, 0, 255),
-                            2,
-                            cv2.LINE_AA)
-            else:
-                cv2.putText(frame, f'Maybe {prediction.capitalize()} ({int(pred_prob*100)}%)',
-                            (0+int(0.05*h),h-int(0.05*h)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
-                            (45, 255, 255),
-                            2,
-                            cv2.LINE_AA)
+                words.append(prediction)
+                if len(words) > 10:
+                    del words[0]
+                    b = Counter(words)
+                    print(b.most_common(1)[0][1])
 
-        else:
-                cv2.putText(frame, 'Detecting Hand...',
-                            (w-int(0.5*h),int(0.05*h)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2,
-                            (0,0,0),
-                            2,
-                            cv2.LINE_AA)
+                    for i in range(len(labels)):
+        #                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
+                        cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
+                        cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
+                                             (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+4)) ), color,-1)
+
+                    # uncomment for NN
+                    # for i in range(len(labels)):
+                    #     cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
+                    #     cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
+                    if b.most_common(1)[0][1] > 6:
+
+                        # setup text
+                        font = cv2.FONT_HERSHEY_SIMPLEX
+                        text = f'{b.most_common(1)[0][0].upper()}'
+                        fontsize = 10
+
+                        # get boundary of this text
+                        textsize = cv2.getTextSize(text, font, fontsize, 2)[0]
+
+                        # get coords based on boundary
+                        textX = int((w - textsize[0]) / 2)
+                        textY = int((h + textsize[1]) / 2)
+
+                        cv2.putText(frame, text,
+                                    (textX, textY),
+                                    font,
+                                    fontsize,
+                                    (0,255,0),
+                                    7,
+                                    cv2.LINE_AA)
+
+
+                    # add text with prediction
+                    if pred_prob > args.threshold_prediction:
+                        cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
+                                    (0+int(0.05*h),h-int(0.05*h)),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    2 ,
+                                    (0,255,0),
+                                    2,
+                                    cv2.LINE_AA)
+                    elif pred_prob < 0.3:
+                        cv2.putText(frame, 'I am not sure...',
+                                    (0+int(0.05*h),h-int(0.05*h)),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    2 ,
+                                    (0, 0, 255),
+                                    2,
+                                    cv2.LINE_AA)
+                    else:
+                        cv2.putText(frame, f'Maybe {prediction.capitalize()} ({int(pred_prob*100)}%)',
+                                    (0+int(0.05*h),h-int(0.05*h)),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    2 ,
+                                    (45, 255, 255),
+                                    2,
+                                    cv2.LINE_AA)
+
+                else:
+                        cv2.putText(frame, 'Detecting Hand...',
+                                    (w-int(0.5*h),int(0.05*h)),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    2,
+                                    (0,0,0),
+                                    2,
+                                    cv2.LINE_AA)
 
 
         #draw_landmarks_custom(frame, results)
