@@ -17,8 +17,8 @@ from collections import Counter
 parser = ArgumentParser()
 parser.add_argument("-m", "--model", dest="ML_model", default='models/model_svm_all.sav',
                     help="PATH of model FILE.", metavar="FILE")
-parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.7, type=float,
-                    help="Threshold for prediction. A number between 0 and 1. default is 0.7")
+parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.6, type=float,
+                    help="Threshold for prediction. A number between 0 and 1. default is 0.6")
 parser.add_argument("-dc", "--det_conf", dest="min_detection_confidence", default=0.5, type=float,
                     help="Threshold for prediction. A number between 0 and 1. default is 0.5")
 parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default=0.5, type=float,
@@ -76,10 +76,8 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                 if len(words) > 10:
                     del words[0]
                     b = Counter(words)
-                    print(b.most_common(1)[0][1])
 
                     for i in range(len(labels)):
-        #                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
                         cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
                         cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
                                              (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+4)) ), color,-1)
@@ -94,6 +92,7 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                         font = cv2.FONT_HERSHEY_SIMPLEX
                         text = f'{b.most_common(1)[0][0].upper()}'
                         fontsize = 10
+                        fontbold = 7
 
                         # get boundary of this text
                         textsize = cv2.getTextSize(text, font, fontsize, 2)[0]
@@ -106,10 +105,9 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                                     (textX, textY),
                                     font,
                                     fontsize,
-                                    (0,255,0),
-                                    7,
+                                    (255,255,0),
+                                    fontbold,
                                     cv2.LINE_AA)
-
 
                     # add text with prediction
                     if pred_prob > args.threshold_prediction:
