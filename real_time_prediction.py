@@ -33,7 +33,7 @@ labels = np.array(model.classes_) # put the entire alphabet in the future
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 words = []
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
                           min_tracking_confidence=args.min_tracking_confidence) as holistic:
@@ -47,15 +47,15 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
         color = (0,0,0)
         #cv2.rectangle(frame, (0+int(0.03*h),int(h-0.14*h)), (0+int(0.75*h), int(h-0.015*h)), color,-1)
-        cv2.rectangle(frame, (0, 0),
-                             (int(w*0.18), int(h-h*0.12)), (255,255,255),-1)
+        cv2.rectangle(frame, (w-int(w*0.18), 0),
+                             (w, h), (255,255,255),-1)
 
 
         for i in range(len(labels)):
 #            cv2.rectangle(frame, (90, 10+ i*int(50)), (90, 60+ i*int(50)), color,-1)
-            cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
-            cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
-                                 (90, (i+1)*int(h/(len(labels)+4)) ), color,-1)
+            cv2.putText(frame, labels[i], (w-int(w*0.18)+ 50, (i+1)*int(h/(len(labels)+0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
+            cv2.rectangle(frame, (w-int(w*0.18)+90, (i)*int(h/(len(labels)+0.5))+30),
+                                 (w-int(w*0.18)+90, (i+1)*int(h/(len(labels)+0.5)) ), color,-1)
 
         # perform prediction with relative probability
         if results.right_hand_landmarks:
@@ -70,9 +70,9 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
             for i in range(len(labels)):
 #                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
-                cv2.putText(frame, labels[i], (50, (i+1)*int(h/(len(labels)+4))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
-                cv2.rectangle(frame, (90, (i)*int(h/(len(labels)+4))+30),
-                                     (90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+4)) ), color,-1)
+                cv2.putText(frame, labels[i], (w-int(w*0.18)+50, (i+1)*int(h/(len(labels)+0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
+                cv2.rectangle(frame, (w-int(w*0.18)+90, (i)*int(h/(len(labels)+0.5))+30),
+                                     (w-int(w*0.18)+90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+0.5)) ), color,-1)
 
             # uncomment for NN
             # for i in range(len(labels)):
@@ -108,7 +108,7 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
 
         else:
                 cv2.putText(frame, 'Detecting Hand...',
-                            (w-int(0.5*h),int(0.05*h)),
+                            (0+int(0.05*h),int(0.07*h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             2,
                             (0,0,0),
