@@ -60,7 +60,7 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
         # perform prediction with relative probability
         if results.right_hand_landmarks:
 
-            # draw_limit_rh(frame, results)
+            draw_limit_rh(frame, results)
 
             # uncomment for NN
             # prediction = labels[np.argmax(model.predict(np.array([points_detection(results)])))]
@@ -107,13 +107,13 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                             cv2.LINE_AA)
 
         else:
-                cv2.putText(frame, 'Detecting Hand...',
-                            (0+int(0.05*h),int(0.07*h)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            2,
-                            (0,0,0),
-                            2,
-                            cv2.LINE_AA)
+            cv2.putText(frame, 'Detecting Right Hand...',
+                        (0+int(0.05*h),int(0.07*h)),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        2,
+                        (0,0,0),
+                        2,
+                        cv2.LINE_AA)
 
 
         #draw_landmarks_custom(frame, results)
