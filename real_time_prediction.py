@@ -6,11 +6,9 @@ import mediapipe as mp
 import numpy as np
 import os
 from utils import mediapipe_detection, draw_landmarks, draw_landmarks_custom, draw_limit_rh, draw_limit_lh, check_detection, points_detection
-#from keras.models import model_from_json
 import pickle
 from sklearn import svm
 from argparse import ArgumentParser
-
 
 # - INPUT PARAMETERS ------------------------------- #
 parser = ArgumentParser()
@@ -28,7 +26,7 @@ args = parser.parse_args()
 
 # load svm model
 model = pickle.load(open(args.ML_model, 'rb'))
-labels = np.array(model.classes_) # put the entire alphabet in the future
+labels = np.array(model.classes_)  # put the entire alphabet in the future
 
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
@@ -39,23 +37,22 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
                           min_tracking_confidence=args.min_tracking_confidence) as holistic:
     while cap.isOpened():
         ret, frame = cap.read()
-        #frame = cv2.flip(frame, 1)
+        # frame = cv2.flip(frame, 1)
         h, w, c = frame.shape
 
         # make detection
         image, results = mediapipe_detection(frame, holistic)
 
-        color = (0,0,0)
-        #cv2.rectangle(frame, (0+int(0.03*h),int(h-0.14*h)), (0+int(0.75*h), int(h-0.015*h)), color,-1)
-        cv2.rectangle(frame, (w-int(w*0.18), 0),
-                             (w, h), (255,255,255),-1)
-
+        color = (0, 0, 0)
+        # cv2.rectangle(frame, (0+int(0.03*h),int(h-0.14*h)), (0+int(0.75*h), int(h-0.015*h)), color,-1)
+        cv2.rectangle(frame, (w - int(w * 0.18), 0),
+                      (w, h), (255, 255, 255), -1)
 
         for i in range(len(labels)):
-#            cv2.rectangle(frame, (90, 10+ i*int(50)), (90, 60+ i*int(50)), color,-1)
-            cv2.putText(frame, labels[i], (w-int(w*0.18)+ 50, (i+1)*int(h/(len(labels)+0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
-            cv2.rectangle(frame, (w-int(w*0.18)+90, (i)*int(h/(len(labels)+0.5))+30),
-                                 (w-int(w*0.18)+90, (i+1)*int(h/(len(labels)+0.5)) ), color,-1)
+            # cv2.rectangle(frame, (90, 10+ i*int(50)), (90, 60+ i*int(50)), color,-1)
+            cv2.putText(frame, labels[i], (w - int(w * 0.18) + 50, (i + 1) * int(h / (len(labels) + 0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+            cv2.rectangle(frame, (w - int(w * 0.18) + 90, i * int(h / (len(labels) + 0.5)) + 30),
+                          (w - int(w * 0.18) + 90, (i + 1) * int(h / (len(labels) + 0.5))), color, -1)
 
         # perform prediction with relative probability
         if results.right_hand_landmarks:
@@ -69,54 +66,53 @@ with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence
             pred_prob = np.max(model.predict_proba(np.array([points_detection(results)])))
 
             for i in range(len(labels)):
-#                cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
-                cv2.putText(frame, labels[i], (w-int(w*0.18)+50, (i+1)*int(h/(len(labels)+0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,0), 2, cv2.LINE_AA)
-                cv2.rectangle(frame, (w-int(w*0.18)+90, (i)*int(h/(len(labels)+0.5))+30),
-                                     (w-int(w*0.18)+90+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*2, (i+1)*int(h/(len(labels)+0.5)) ), color,-1)
+                # cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict_proba(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
+                cv2.putText(frame, labels[i], (w - int(w * 0.18) + 50, (i + 1) * int(h / (len(labels) + 0.5))), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2, cv2.LINE_AA)
+                cv2.rectangle(frame, (w - int(w * 0.18) + 90, i * int(h / (len(labels) + 0.5)) + 30),
+                              (w - int(w * 0.18) + 90 + int(model.predict_proba(np.array([points_detection(results)]))[0][i] * 100) * 2, (i + 1) * int(h / (len(labels) + 0.5))),
+                              color, -1)
 
             # uncomment for NN
             # for i in range(len(labels)):
             #     cv2.rectangle(frame, (70, 10+ i*int(50)), (70+int(model.predict(np.array([points_detection(results)]))[0][i]*100)*3, 60+ i*int(50)), color,-1)
             #     cv2.putText(frame, labels[i], (10, 50+ i*int(50)), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,255,0), 4, cv2.LINE_AA)
 
-
             # add text with prediction
             if pred_prob > args.threshold_prediction:
-                cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob*100)}%)',
-                            (0+int(0.05*h),h-int(0.05*h)),
+                cv2.putText(frame, f'{prediction.capitalize()} ({int(pred_prob * 100)}%)',
+                            (0 + int(0.05 * h), h - int(0.05 * h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
-                            (0,255,0),
+                            2,
+                            (0, 255, 0),
                             2,
                             cv2.LINE_AA)
             elif pred_prob < 0.3:
                 cv2.putText(frame, 'I am not sure...',
-                            (0+int(0.05*h),h-int(0.05*h)),
+                            (0 + int(0.05 * h), h - int(0.05 * h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
+                            2,
                             (0, 0, 255),
                             2,
                             cv2.LINE_AA)
             else:
-                cv2.putText(frame, f'Maybe {prediction.capitalize()} ({int(pred_prob*100)}%)',
-                            (0+int(0.05*h),h-int(0.05*h)),
+                cv2.putText(frame, f'Maybe {prediction.capitalize()} ({int(pred_prob * 100)}%)',
+                            (0 + int(0.05 * h), h - int(0.05 * h)),
                             cv2.FONT_HERSHEY_SIMPLEX,
-                            2 ,
+                            2,
                             (45, 255, 255),
                             2,
                             cv2.LINE_AA)
 
         else:
             cv2.putText(frame, 'Detecting Right Hand...',
-                        (0+int(0.05*h),int(0.07*h)),
+                        (0 + int(0.05 * h), int(0.07 * h)),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         2,
-                        (0,0,0),
+                        (0, 0, 0),
                         2,
                         cv2.LINE_AA)
 
-
-        #draw_landmarks_custom(frame, results)
+        # draw_landmarks_custom(frame, results)
 
         cv2.imshow('LIS: real time alphabet prediction', frame)
 
