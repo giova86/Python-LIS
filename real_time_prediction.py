@@ -23,9 +23,10 @@ parser.add_argument("-tc", "--trk_conf", dest="min_tracking_confidence", default
 args = parser.parse_args()
 # -------------------------------------------------- #
 
+current_directory = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/")
 
 # load svm model
-model = pickle.load(open(args.ML_model, 'rb'))
+model = pickle.load(open(current_directory + '/' + args.ML_model, 'rb'))
 labels = np.array(model.classes_)  # put the entire alphabet in the future
 
 mp_holistic = mp.solutions.holistic
