@@ -32,7 +32,7 @@ labels = np.array(model.classes_)  # put the entire alphabet in the future
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 words = []
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(2)
 
 with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
                           min_tracking_confidence=args.min_tracking_confidence) as holistic:
