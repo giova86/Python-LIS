@@ -12,6 +12,8 @@ from argparse import ArgumentParser
 
 # - INPUT PARAMETERS ------------------------------- #
 parser = ArgumentParser()
+parser.add_argument("-c", "--camera", dest="id_camera", default=0, type=int,
+                    help="ID of the camera. A number between 0 and N. default is 0")
 parser.add_argument("-m", "--model", dest="ML_model", default='models/model_svm_all.sav',
                     help="PATH of model FILE.", metavar="FILE")
 parser.add_argument("-t", "--threshold", dest="threshold_prediction", default=0.5, type=float,
@@ -32,7 +34,7 @@ labels = np.array(model.classes_)  # put the entire alphabet in the future
 mp_holistic = mp.solutions.holistic
 mp_drawing = mp.solutions.drawing_utils
 words = []
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(args.id_camera)
 
 with mp_holistic.Holistic(min_detection_confidence=args.min_detection_confidence,
                           min_tracking_confidence=args.min_tracking_confidence) as holistic:
