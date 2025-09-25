@@ -56,7 +56,7 @@ def create_sidebar_panel(labels, predictions=None, width=300, height=600):
         # Progress bar - positioned next to label
         bar_x = 60  # Space for letter + some margin
         bar_y = y_start + (item_height // 2) - (bar_height // 2)  # Center bar vertically
-        bar_width = width - bar_x - 30  # Leave space for percentage text
+        bar_width = width - bar_x - 55  # Leave space for percentage text
         
         # Label text - positioned to the left of the bar
         cv2.putText(sidebar, label.upper(), (label_x+10, label_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
@@ -121,7 +121,7 @@ def draw_prediction_overlay(frame, prediction, confidence, threshold, h, w):
             status_text = "MAYBE"
             status_color = (0, 165, 255)
             pred_color = (200, 200, 200)
-            main_text = f"Maybe: {prediction.upper()}"
+            main_text = f"Letter: {prediction.upper()}"
             conf_text = f"Confidence: {int(confidence * 100)}%"
         else:
             status_text = "UNCERTAIN"
