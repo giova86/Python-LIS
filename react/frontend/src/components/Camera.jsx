@@ -65,12 +65,10 @@ export default function Camera({ onFrame, data }) {
 
       {camError ? (
         <div className="camera-error">
-          <div className="camera-error-icon">📷</div>
+          <div className="camera-error-mark">!</div>
           <h3>Camera non accessibile</h3>
           <p>{camError}</p>
-          <p style={{ marginTop: 8, fontSize: 12, opacity: 0.5 }}>
-            Controlla i permessi del browser e ricarica la pagina.
-          </p>
+          <p>Controlla i permessi del browser e ricarica la pagina.</p>
         </div>
       ) : (
         <video ref={videoRef} autoPlay playsInline muted className="camera-feed" />
@@ -78,30 +76,41 @@ export default function Camera({ onFrame, data }) {
 
       {!camError && (
         <>
-          {/* Hand indicator */}
-          <div className={`hand-pill ${hasHand ? 'has-hand' : 'no-hand'}`}>
-            <span className="hand-dot" />
-            {hasHand ? 'Mano destra' : 'Nessuna mano'}
+          {/* viewfinder crop marks */}
+          <span className="crop tl" />
+          <span className="crop tr" />
+          <span className="crop bl" />
+          <span className="crop br" />
+
+          {/* hand detection tag */}
+          <div className={`hand-tag ${hasHand ? 'on' : 'off'}`}>
+            <span className="hand-led" />
+            {hasHand ? 'Mano rilevata' : 'In attesa mano'}
           </div>
 
-          {/* Bottom overlay */}
-          <div className="pred-overlay">
-            <div className={`pred-badge ${status}`}>
-              {STATUS[status]}
-            </div>
+          {/* prediction overlay */}
+          <div className="pred">
+            <div className={`pred-status ${status}`}>{STATUS[status]}</div>
 
             {prediction ? (
-              <>
+              <div className="pred-row">
                 <div key={prediction} className="pred-letter">
                   {prediction.toUpperCase()}
                 </div>
-                <div className="pred-conf">
-                  Confidenza: {Math.round(confidence * 100)}%
+                <div className="pred-readout">
+                  <span className="pred-conf-label">Confidenza</span>
+                  <span className="pred-conf-val">{Math.round(confidence * 100)}%</span>
+                  <div className="pred-meter">
+                    <div
+                      className="pred-meter-fill"
+                      style={{ width: `${Math.round(confidence * 100)}%` }}
+                    />
+                  </div>
                 </div>
-              </>
+              </div>
             ) : (
               <p className="pred-prompt">
-                Mostra la mano destra alla telecamera…
+                Mostra la mano destra alla telecamera.
               </p>
             )}
           </div>

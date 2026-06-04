@@ -48,16 +48,19 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+    <div className="shell">
       <header className="app-header">
-        <div className="header-logo">
-          <span className="header-logo-icon">🤟</span>
-          <span className="header-logo-text">LIS Recognition</span>
-          <span className="header-logo-sub">Alfabeto</span>
+        <div className="brand">
+          <span className="brand-mark"><em>L</em>IS</span>
+          <span className="brand-divider" />
+          <span className="brand-meta">
+            <span className="brand-title">Riconoscimento Alfabeto</span>
+            <span className="brand-sub">Lingua dei Segni · Real-time</span>
+          </span>
         </div>
-        <div className={`conn-badge ${connected ? 'on' : 'off'}`}>
-          <span className="conn-dot" />
-          {connected ? 'Backend connesso' : 'Connessione…'}
+        <div className={`conn ${connected ? 'on' : 'off'}`}>
+          <span className="conn-led" />
+          {connected ? 'Online' : 'Offline'}
         </div>
       </header>
 

@@ -8,17 +8,21 @@ export default function PredictionSidebar({ data }) {
   return (
     <aside className="sidebar">
       <div className="sidebar-head">
-        <div className="sidebar-title">Confidenza Lettere</div>
-        <div className="sidebar-sub">Alfabeto LIS — tutte le lettere</div>
+        <div>
+          <div className="sidebar-title">Spettro Confidenza</div>
+          <div className="sidebar-sub">Alfabeto LIS — tutte le lettere</div>
+        </div>
+        {labels.length > 0 && (
+          <div className="sidebar-count">{labels.length}</div>
+        )}
       </div>
 
       {labels.length === 0 ? (
         <div className="sidebar-empty">
-          <span style={{ fontSize: 32 }}>⏳</span>
-          In attesa del backend…
+          <span className="dots">In attesa del backend</span>
         </div>
       ) : (
-        <div className="letter-list">
+        <div className="spectrum">
           {labels.map(label => (
             <LetterBar
               key={label}
